@@ -1,8 +1,11 @@
-from flask import Flask,render_template, request
-import os, matplotlib
+import base64
+import os
+
+import matplotlib
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
-SAVE_PATH = "/tmp"
+SAVE_PATH = "./tmp"
 sequences = []
 sequences_file = None
 image_format = ''
@@ -29,23 +32,19 @@ def generate_logo():
 
         # save sequences file
         if sequences_file:
-            # save new file
-            file_path = os.path.join(SAVE_PATH, 'sequences.txt')
-            sequences_file.save(file_path)
-
             # read sequences file
-            with open(file_path, 'r') as file:
-                sequences_input = file.read()
-                sequences = sequences_input.split('\n')
+                sequences_input = sequences_file.read().decode('utf-8')
+                sequences = sequences_input.split('\r\n')
+                print(sequences)
 
         # generate logo
         matplotlib.use('agg') # 因為在 flask 中使用，所以要加這行
         visualize_sequence_logo(sequences, SAVE_PATH, image_format)
         
-        image_data = visualize_sequence_logo()
+        image_data = visualize_sequence_logo2(sequences, SAVE_PATH, image_format)
         image_data_base64 = base64.b64encode(image_data).decode('utf-8')
-
-        return render_template('logo.html', image_data=f"data:image/{image_format};base64,image_data_base64", sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
+        sequence_length = len(sequences[0])
+        return render_template('logo.html', image_data=f"data:image/{image_format};base64,{image_data_base64}", sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
 
         #sequence_length = max([len(sequence) for sequence in sequences])
         #print(sequences_input)
@@ -57,10 +56,15 @@ def getInputData():
     global sequences, image_format
     return sequences, image_format
 
+import io
+import os
+
 import logomaker
+import matplotlib
 import matplotlib.pyplot as plt
-import os, matplotlib
 import numpy as np
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 # from Bio import SeqIO
 
 def visualize_sequence_logo(sequences, save_path=None, image_format=None, show_img=False):
