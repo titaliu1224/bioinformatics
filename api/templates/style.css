@@ -1,0 +1,9 @@
+body{
+    background: linear-gradient(rgb(49, 52, 60), rgb(105, 111, 121));
+} 
+
+.input-block{
+    max-width: 1100px;
+    background-color: rgba(235, 235, 235, 0.9);
+    border-radius: 10px;
+}
