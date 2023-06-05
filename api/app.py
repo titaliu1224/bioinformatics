@@ -44,7 +44,7 @@ def generate_logo():
         image_data = visualize_sequence_logo2(sequences, SAVE_PATH, image_format)
         image_data_base64 = base64.b64encode(image_data).decode('utf-8')
         sequence_length = len(sequences[0])
-        return render_template('logo.html', image_data=f"data:image/{image_format};base64,{image_data_base64}", sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
+        return render_template('logo.html', image_data=f"data:image/{image_format};base64,{image_data_base64}", image_format = image_format,sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
 
         #sequence_length = max([len(sequence) for sequence in sequences])
         #print(sequences_input)
