@@ -1,1 +1,4 @@
-Flask==2.2.2
+Flask==2.3.2
+logomaker==0.8
+matplotlib==3.7.1
+numpy==1.24.3
