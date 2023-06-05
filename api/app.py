@@ -41,10 +41,15 @@ def generate_logo():
         # generate logo
         matplotlib.use('agg') # 因為在 flask 中使用，所以要加這行
         visualize_sequence_logo(sequences, SAVE_PATH, image_format)
+        
+        image_data = visualize_sequence_logo()
+        image_data_base64 = base64.b64encode(image_data).decode('utf-8')
 
-        sequence_length = max([len(sequence) for sequence in sequences])
-        print(sequences_input)
-        return render_template('logo.html', logo_img = os.path.join(SAVE_PATH, 'logo.' + image_format), sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
+        return render_template('logo.html', image_data=f"data:image/{image_format};base64,image_data_base64", sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
+
+        #sequence_length = max([len(sequence) for sequence in sequences])
+        #print(sequences_input)
+        #return render_template('logo.html', logo_img = os.path.join(SAVE_PATH, 'logo.' + image_format), sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
     else:
         return render_template('index.html')
 
@@ -79,6 +84,23 @@ def visualize_sequence_logo(sequences, save_path=None, image_format=None, show_i
     plt_path = os.path.join(save_path, 'logo.' + image_format)
     plt.savefig(plt_path)
     print("saved image: ", plt_path)
+    
+def visualize_sequence_logo2(sequences, save_path=None, image_format=None, show_img=False):
+    matrix = logomaker.alignment_to_matrix(sequences, to_type='counts')
+    row_sums = np.sum(matrix, axis=1)
+    frequency_matrix = matrix / np.array(row_sums)[:, np.newaxis].astype(float)
+    logo = logomaker.Logo(matrix, color_scheme='skylign_protein')
+    logo.style_spines(visible=False)
+    logo.style_spines(spines=['left', 'bottom'], visible=True)
+    logo.style_xticks(rotation=0, fmt='%d', anchor=0)
+    plt.ylabel("Frequency")
+    canvas = FigureCanvas(logo.fig)
+    buffer = io.BytesIO()
+    canvas.print_png(buffer)
+    image_data = buffer.getvalue()
+
+    # 將圖像資料返回
+    return image_data
 
 if __name__ == '__main__':
     app.run()
