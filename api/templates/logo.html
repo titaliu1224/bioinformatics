@@ -30,7 +30,7 @@
         </div>
         <div class="row">
 <!--           <img src="{{ logo_img }}" class="img-fluid"> -->
-              <img src="{{ image_data }}" alt="Sequence Logo" class="img-fluid">
+              <img src="{{ image_data }}" alt="Sequence Logo" class="img-fluid" download="image.{{image_format}}">
         </div>
         <div class="row text-center" method="post"> <!-- 使用justify-content-center类将按钮水平置中 -->
           <form onclick="downloadFile()">
@@ -42,8 +42,8 @@
     </div>
     <script>
       function downloadFile() {
-        var fileUrl = '{{ logo_img }}';  // 文件的URL地址
-        var fileName = '{{ logo_img }}';  // 文件名
+        var fileUrl = '{{ image_data }}';  // 文件的URL地址
+        var fileName = '{{ image_data }}';  // 文件名
   
         var link = document.createElement('a');
         link.href = fileUrl;
