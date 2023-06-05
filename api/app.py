@@ -39,7 +39,7 @@ def generate_logo():
 
         # generate logo
         matplotlib.use('agg') # 因為在 flask 中使用，所以要加這行
-        visualize_sequence_logo(sequences, SAVE_PATH, image_format)
+        # visualize_sequence_logo(sequences, SAVE_PATH, image_format)
         
         image_data = visualize_sequence_logo2(sequences, SAVE_PATH, image_format)
         image_data_base64 = base64.b64encode(image_data).decode('utf-8')
