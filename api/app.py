@@ -44,7 +44,7 @@ def generate_logo():
 
         sequence_length = max([len(sequence) for sequence in sequences])
         print(sequences_input)
-        return render_template('logo.html', logo_img = os.path.join(save_path, 'logo.' + image_format), sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
+        return render_template('logo.html', logo_img = os.path.join(SAVE_PATH, 'logo.' + image_format), sequence_number = len(sequences), sequence_length = sequence_length, sequences_input = str(sequences_input))
     else:
         return render_template('index.html')
 
